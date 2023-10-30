@@ -4,6 +4,7 @@ const WorkoutForm = () => {
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
+    const [error, setError] = useState(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -19,6 +20,21 @@ const WorkoutForm = () => {
         })
 
         const json = await response.json()
+
+        if (!response.ok) {
+            setError(json.error)
+        }
+
+        if (response.ok) {
+            setError(null)
+            console.log('New workout added!')
+            // reset the form
+            setTitle('')
+            setLoad('')
+            setReps('')
+        }
+
+
     }
     
     return (
@@ -46,6 +62,9 @@ const WorkoutForm = () => {
                     onChange={(e) => setReps(e.target.value)}
                     value={reps}
                 />
+
+                <button>Add Workout</button>
+                {error && <div className="error">{error}</div>}
             </form>
         </div>
     )
